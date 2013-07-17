@@ -1,0 +1,17 @@
+{% extends 'phones/index.html' %}
+{% block title %}
+	{{ consumer.all_names }}
+{% endblock %}
+{% block content %}
+	<h2> {{ consumer.all_names }} </h2>
+	<hr>
+	<h3> First name: {{ consumer.first_name }}</h3>
+	<h3> Second name: {{ consumer.second_name }}</h3>
+	<h3> Last name: {{ consumer.last_name }}</h3>
+	<hr>
+	{% for number in phones %}
+		<h4>{{ number.get_type_display }}: {{ number.number }}</h4>
+	{% endfor %}
+	<hr>
+	<a href="{% url 'list' %}"><input type='button' value='cancel'></a>
+{% endblock %}

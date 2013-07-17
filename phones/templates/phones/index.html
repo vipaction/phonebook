@@ -1,0 +1,39 @@
+<html>
+<head>
+	<title>
+		{% block title %}
+			Main page
+		{% endblock %}
+	</title>
+	<style type='text/css'>
+	   #content{ 
+	    margin: 50 auto;
+	    width: 440px; 
+	    height: 500px;
+	    border: 1px solid black;
+	    padding: 20px;
+	    overflow: auto;
+	    background-color: #eee;
+
+	    border-radius: 6px;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+
+		box-shadow: 1px 3px 5px #555;
+		-moz-box-shadow: 1px 3px 5px #555;
+		-webkit-box-shadow: 1px 3px 5px #555;
+
+	   }
+	   #content a{
+	   	font-size: 20px;
+	   }
+   	</style>
+</head>
+<body>
+	<div id='content'>
+		{% block content %}
+			Empty
+		{% endblock %}
+	</div>
+</body>
+</html>

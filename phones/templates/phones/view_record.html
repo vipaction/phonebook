@@ -1,0 +1,25 @@
+{% extends 'phones/index.html' %}
+{% block title %}
+	{{ title_record }}
+{% endblock %}
+{% block content %}
+	<form method='post' action="">
+		{% csrf_token %}
+		{% block content_title %}
+			<h2> {{ title_record }} </h2>
+		{% endblock %}
+		<hr>
+			{{ name.as_p }}
+		<hr>
+		<h3>Phones</h3>
+			{{ formset.management_form }}
+			{% for form in formset %}
+				<div>
+					{{ form }}
+				</div>
+			{% endfor %}
+		<hr>
+		<input type='submit'>
+		<button name='cancel' value='cancel'>Cancel</button>
+	</form>
+{% endblock %}

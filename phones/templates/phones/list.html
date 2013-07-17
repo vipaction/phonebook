@@ -1,0 +1,31 @@
+{% extends 'phones/index.html' %}
+{% block title %}
+	Consumers list
+{% endblock %}
+{% block content %}
+	<h3>Welcome, {{ user.username }}</h3>
+	<hr>
+	<form method='post' action="{% url 'delete' %}">
+		{% csrf_token %}
+		{% if consumer_list %}
+		    {% for consumer in consumer_list %}
+		   	 <div>
+		   	 	{% ifequal consumer.user_id user.id %}
+		   	 		<input type='checkbox' value='{{ consumer.id }}' name='del'> 
+		   	 		<a href="{% url 'view_record' consumer.id %}">{{ consumer.all_names }}</a>
+		   	 	{% else %}
+		   	 		<input type='checkbox' value='{{ consumer.id }}' name='del' disabled="disabled"> 
+		   	 		<a href="{% url 'only_view' consumer.id %}">{{ consumer.all_names }}</a>
+		   	 	{% endifequal %}
+		     </div>
+		    {% endfor %}
+
+		{% else %}
+		    <p>No records are available.</p>
+		{% endif %}
+		<input type='submit' value='Delete'>
+		<button formaction="{% url 'new_record' %}" formmethod='get'>Add new</button>
+		<hr>
+		<button formaction="{% url 'logout' %}" formmethod='post'>Logout</button>
+	</form>
+{% endblock %}
