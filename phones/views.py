@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from phones.models import Consumer, Phone, RecordForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib import auth
+from django.contrib.auth import authenticate, login
 
 
 @login_required
@@ -23,6 +23,8 @@ def only_view(request, id_record):
 
 def view_record(request, id_record):
 	record = get_object_or_404(Consumer, id=id_record)
+	if record.user_id != request.user.id:
+		return only_view(request, id_record)
 	name = RecordForm(instance=record)
 	phone_formset = inlineformset_factory(Consumer, Phone, extra=1)
 	if request.method == 'POST':
@@ -57,7 +59,7 @@ def new_record(request):
 	return render(request,'phones/view_record.html', {'formset': formset, 'title_record': 'New record', 'name': name})
 
 def delete_records(request):
-	Consumer.objects.filter(id__in=request.POST.getlist('del')).delete()	
+	Consumer.objects.filter(id__in=request.POST.getlist('del'), user_id=request.user.id).delete()	
 	return HttpResponseRedirect(reverse('list'))
 
 def new_user(request):
@@ -65,12 +67,13 @@ def new_user(request):
 	user_password=request.POST.get('password','')
 	isset_user=User.objects.filter(username=user_name)
 	if user_name != '' and user_password != '':		
-		user=auth.authenticate(username=user_name, password=user_password)
+		user=authenticate(username=user_name, password=user_password)
 		if isset_user:			
 			if user is not None:
-				auth.login(request, user)
+				login(request, user)
 			return HttpResponseRedirect(reverse('list'))
 		new_user=User.objects.create_user(username=user_name, password=user_password)
 		new_user.save()
-		auth.login(request, user)
+		user=authenticate(username=user_name, password=user_password)
+		login(request, user)
 	return HttpResponseRedirect(reverse('list'))
